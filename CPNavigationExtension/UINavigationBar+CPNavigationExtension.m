@@ -28,19 +28,23 @@
 #pragma mark - Public Methods
 
 - (void)cp_setAppearanceWithNavigationItem:(UINavigationItem *)item {
-    if (__CPNavigationExtensionSystemMajorVersion() < 10) {
-        //iOS10 earlier, fix bugs in animate transition block
-        [CATransaction begin];
-        [CATransaction setDisableActions:YES];
-        [self setBarTintColor:item.cp_barTintColor?:self.cp_defaultBarTintColor];
-        [CATransaction commit];
-    } else {
-        [self setBarTintColor:item.cp_barTintColor?:self.cp_defaultBarTintColor];
+    if (self.cp_transitionEnabled) {
+        UIToolbar *backdropEffectView = [self cp_backdropEffectView];
+        if (__CPNavigationExtensionSystemMajorVersion() < 10) {
+            //iOS10 earlier
+            [CATransaction begin];
+            [CATransaction setDisableActions:YES];
+            backdropEffectView.barTintColor = item.cp_barTintColor?:self.cp_defaultBarTintColor;
+            [CATransaction commit];
+        } else {
+            backdropEffectView.barTintColor = item.cp_barTintColor?:self.cp_defaultBarTintColor;
+        }
+        
+        [self setTintColor:item.cp_tintColor?:self.cp_defaultTintColor];
+        [self setTitleTextAttributes:item.cp_titleTextAttributes?:self.cp_defaultTitleTextAttributes];
+        [self setShadowImage:item.cp_shadowImage?:self.cp_defaultShadowImage];
+        [self cp_setShadowImageHidden:item.cp_shadowImageHidden];
     }
-    [self setTintColor:item.cp_tintColor?:self.cp_defaultTintColor];
-    [self setTitleTextAttributes:item.cp_titleTextAttributes?:self.cp_defaultTitleTextAttributes];
-    [self setShadowImage:item.cp_shadowImage?:self.cp_defaultShadowImage];
-    [self cp_setShadowImageHidden:item.cp_shadowImageHidden];
 }
 
 - (void)cp_setShadowImageHidden:(BOOL)shadowImageHidden {
@@ -55,6 +59,15 @@
 }
 
 #pragma mark - Associated Object
+
+- (void)setCp_transitionEnabled:(BOOL)cp_transitionEnabled {
+    objc_setAssociatedObject(self, @selector(cp_transitionEnabled), @(cp_transitionEnabled), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    [self cp_addBackdropEffectViewIfNeeded];
+}
+
+- (BOOL)cp_transitionEnabled {
+    return objc_getAssociatedObject(self, _cmd);
+}
 
 - (void)setCp_defaultTintColor:(UIColor *)cp_defaultTintColor {
     objc_setAssociatedObject(self, @selector(cp_defaultTintColor), cp_defaultTintColor, OBJC_ASSOCIATION_COPY_NONATOMIC);
@@ -98,12 +111,32 @@
     if (!view) {
         view = [UIToolbar new];
         [self setCp_backdropEffectView:view];
+        [self cp_hideOriginalBackground];
     }
     
     return view;
 }
 
 #pragma mark -
+
+- (void)cp_addBackdropEffectViewIfNeeded {
+    UIToolbar *backdropEffectView = [self cp_backdropEffectView];
+    if (![backdropEffectView superview]) {
+        UIView *bgView = [self cp_backgroundView];
+        backdropEffectView.frame = bgView.bounds;
+        backdropEffectView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+        [bgView addSubview:backdropEffectView];
+    }
+}
+
+- (UIView *)cp_backgroundView {
+    return [self valueForKey:@"_backgroundView"];
+}
+
+- (void)cp_hideOriginalBackground {
+    UIImage *image = [UIImage new];
+    [self setBackgroundImage:image forBarMetrics:UIBarMetricsDefault];
+}
 
 - (id)valueForUndefinedKey:(NSString *)key {
     return nil;

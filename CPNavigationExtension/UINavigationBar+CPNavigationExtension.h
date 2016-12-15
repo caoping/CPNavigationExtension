@@ -25,6 +25,7 @@
 
 @interface UINavigationBar (CPNavigationExtension)
 
+@property (nonatomic) BOOL cp_transitionEnabled;
 @property (nonatomic, copy) UIColor *cp_defaultTintColor;
 @property (nonatomic, copy) UIColor *cp_defaultBarTintColor;
 @property (nonatomic, copy) NSDictionary *cp_defaultTitleTextAttributes;

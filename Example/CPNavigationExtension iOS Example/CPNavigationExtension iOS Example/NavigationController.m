@@ -19,6 +19,24 @@
     [super viewDidLoad];
     
     self.delegate = self;
+    self.navigationBar.cp_transitionEnabled = YES;
+    [self setNavigationBarAppearanceWithFirstViewController];
+}
+
+#pragma mark - Override
+
+- (void)setViewControllers:(NSArray<__kindof UIViewController *> *)viewControllers {
+    [super setViewControllers:viewControllers];
+    [self setNavigationBarAppearanceWithFirstViewController];
+}
+
+- (void)setViewControllers:(NSArray<UIViewController *> *)viewControllers animated:(BOOL)animated {
+    [super setViewControllers:viewControllers animated:animated];
+    [self setNavigationBarAppearanceWithFirstViewController];
+}
+
+- (void)setNavigationBarAppearanceWithFirstViewController {
+    [self cp_setNavigationBarAppearanceAfterLoadViewIfNeededWithViewController:[self.viewControllers firstObject]];
 }
 
 #pragma mark - UINavigationControllerDelegate
