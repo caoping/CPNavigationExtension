@@ -28,8 +28,16 @@
 #pragma mark - Public Methods
 
 - (void)cp_setAppearanceWithNavigationItem:(UINavigationItem *)item {
+    if (__CPNavigationExtensionSystemMajorVersion() < 10) {
+        //iOS10 earlier, fix bugs in animate transition block
+        [CATransaction begin];
+        [CATransaction setDisableActions:YES];
+        [self setBarTintColor:item.cp_barTintColor?:self.cp_defaultBarTintColor];
+        [CATransaction commit];
+    } else {
+        [self setBarTintColor:item.cp_barTintColor?:self.cp_defaultBarTintColor];
+    }
     [self setTintColor:item.cp_tintColor?:self.cp_defaultTintColor];
-    [self setBarTintColor:item.cp_barTintColor?:self.cp_defaultBarTintColor];
     [self setTitleTextAttributes:item.cp_titleTextAttributes?:self.cp_defaultTitleTextAttributes];
     [self setShadowImage:item.cp_shadowImage?:self.cp_defaultShadowImage];
     [self cp_setShadowImageHidden:item.cp_shadowImageHidden];
@@ -58,6 +66,7 @@
 
 - (void)setCp_defaultBarTintColor:(UIColor *)cp_defaultBarTintColor {
     objc_setAssociatedObject(self, @selector(cp_defaultBarTintColor), cp_defaultBarTintColor, OBJC_ASSOCIATION_COPY_NONATOMIC);
+    [[self cp_backdropEffectView] setBarTintColor:cp_defaultBarTintColor];
 }
 
 - (UIColor *)cp_defaultBarTintColor {
@@ -78,6 +87,39 @@
 
 - (UIImage *)cp_defaultShadowImage {
     return objc_getAssociatedObject(self, _cmd);
+}
+
+- (void)setCp_backdropEffectView:(UIToolbar *)cp_backdropEffectView {
+    objc_setAssociatedObject(self, @selector(cp_backdropEffectView), cp_backdropEffectView, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
+- (UIToolbar *)cp_backdropEffectView {
+    UIToolbar *view = objc_getAssociatedObject(self, _cmd);
+    if (!view) {
+        view = [UIToolbar new];
+        [self setCp_backdropEffectView:view];
+    }
+    
+    return view;
+}
+
+#pragma mark -
+
+- (id)valueForUndefinedKey:(NSString *)key {
+    return nil;
+}
+
+#pragma mark - Helper
+
+NSUInteger __CPNavigationExtensionSystemMajorVersion() {
+    static NSUInteger _deviceSystemMajorVersion = -1;
+    static dispatch_once_t onceToken;
+    
+    dispatch_once(&onceToken, ^{
+        _deviceSystemMajorVersion = [[[[[UIDevice currentDevice] systemVersion] componentsSeparatedByString:@"."] objectAtIndex:0] intValue];
+    });
+    
+    return _deviceSystemMajorVersion;
 }
 
 @end

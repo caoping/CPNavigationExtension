@@ -22,6 +22,39 @@
 
 #import "UINavigationController+CPNavigationExtension.h"
 
+@interface UIViewController (CPLoadViewIfNeeded)
+
+- (void)cp_loadViewIfNeeded;
+
+@end
+
+@implementation UIViewController (CPLoadViewIfNeeded)
+
+- (void)cp_loadViewIfNeeded {
+    if (NSClassFromString(@"UIStackView")) {
+        //iOS 9
+        [self loadViewIfNeeded];
+    } else {
+        if (![self isViewLoaded]) {
+            @try {
+                UIView *v = self.view;
+            } @catch (NSException *exception) {
+                
+            }
+        }
+    }
+}
+
+@end
+
 @implementation UINavigationController (CPNavigationExtension)
+
+- (void)cp_setNavigationBarAppearanceAfterLoadViewIfNeededWithViewController:(UIViewController *)viewController {
+    if (!viewController) {
+        return;
+    }
+    [viewController cp_loadViewIfNeeded];
+    [self.navigationBar cp_setAppearanceWithNavigationItem:viewController.navigationItem];
+}
 
 @end
