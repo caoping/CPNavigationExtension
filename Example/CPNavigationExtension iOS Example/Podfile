@@ -1,0 +1,8 @@
+#source 'https://github.com/CocoaPods/Specs.git'
+source 'git@gitlab.alibaba-inc.com:alipods/specs-mirror.git'
+
+target 'CPNavigationExtension iOS Example' do
+	platform :ios, '8.0'
+	pod 'CPNavigationExtension', :path => '../..'
+    pod 'Reveal-iOS-SDK', :configurations => ['Debug'], :inhibit_warnings => true
+end
