@@ -24,4 +24,10 @@
 
 @interface UINavigationItem (CPNavigationExtension)
 
+@property (nonatomic, copy) UIColor *cp_tintColor;
+@property (nonatomic, copy) UIColor *cp_barTintColor;
+@property (nonatomic, copy) NSDictionary *cp_titleTextAttributes;
+@property (nonatomic, copy) UIImage *cp_shadowImage;
+@property (nonatomic) BOOL cp_shadowImageHidden;
+
 @end

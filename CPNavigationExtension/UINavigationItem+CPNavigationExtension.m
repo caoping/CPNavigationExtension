@@ -21,7 +21,50 @@
 // SOFTWARE.
 
 #import "UINavigationItem+CPNavigationExtension.h"
+#import <objc/runtime.h>
 
 @implementation UINavigationItem (CPNavigationExtension)
+
+#pragma mark - Associated Object
+
+- (void)setCp_tintColor:(UIColor *)cp_tintColor {
+    objc_setAssociatedObject(self, @selector(cp_tintColor), cp_tintColor, OBJC_ASSOCIATION_COPY_NONATOMIC);
+}
+
+- (UIColor *)cp_tintColor {
+    return objc_getAssociatedObject(self, _cmd);
+}
+
+- (void)setCp_barTintColor:(UIColor *)cp_barTintColor {
+    objc_setAssociatedObject(self, @selector(cp_barTintColor), cp_barTintColor, OBJC_ASSOCIATION_COPY_NONATOMIC);
+}
+
+- (UIColor *)cp_barTintColor {
+    return objc_getAssociatedObject(self, _cmd);
+}
+
+- (void)setCp_titleTextAttributes:(NSDictionary *)cp_titleTextAttributes {
+    objc_setAssociatedObject(self, @selector(cp_titleTextAttributes), cp_titleTextAttributes, OBJC_ASSOCIATION_COPY_NONATOMIC);
+}
+
+- (NSDictionary *)cp_titleTextAttributes {
+    return objc_getAssociatedObject(self, _cmd);
+}
+
+- (void)setCp_shadowImage:(UIImage *)cp_shadowImage {
+    objc_setAssociatedObject(self, @selector(cp_shadowImage), cp_shadowImage, OBJC_ASSOCIATION_COPY_NONATOMIC);
+}
+
+- (UIImage *)cp_shadowImage {
+    return objc_getAssociatedObject(self, _cmd);
+}
+
+- (void)setCp_shadowImageHidden:(BOOL)cp_shadowImageHidden {
+    objc_setAssociatedObject(self, @selector(cp_shadowImageHidden), @(cp_shadowImageHidden), OBJC_ASSOCIATION_COPY_NONATOMIC);
+}
+
+- (BOOL)cp_shadowImageHidden {
+    return [objc_getAssociatedObject(self, _cmd) boolValue];
+}
 
 @end
