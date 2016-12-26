@@ -21,11 +21,10 @@
 // SOFTWARE.
 
 #import <UIKit/UIKit.h>
-#import "UINavigationBar+CPNavigationExtension.h"
-#import "UIViewController+CPNavigationExtension.h"
+#import "CPNavigationBarAppearanceInfo.h"
 
-@interface UINavigationController (CPNavigationExtension)
+@interface UIViewController (CPNavigationExtension)
 
-- (void)cp_setNavigationBarAppearanceAfterLoadViewIfNeededWithViewController:(UIViewController *)viewController;
+@property (nonatomic) CPNavigationBarAppearanceInfo *cp_navigationBarAppearanceInfo;
 
 @end

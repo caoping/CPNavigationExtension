@@ -20,12 +20,14 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#import <UIKit/UIKit.h>
-#import "UINavigationBar+CPNavigationExtension.h"
-#import "UIViewController+CPNavigationExtension.h"
+#import <Foundation/Foundation.h>
 
-@interface UINavigationController (CPNavigationExtension)
+@interface CPNavigationBarAppearanceInfo : NSObject
 
-- (void)cp_setNavigationBarAppearanceAfterLoadViewIfNeededWithViewController:(UIViewController *)viewController;
+@property (nonatomic, copy) UIColor *tintColor;//defailt is nil
+@property (nonatomic, copy) UIColor *barTintColor;//defailt is nil
+@property (nonatomic, copy) NSDictionary *titleTextAttributes;//defailt is nil
+@property (nonatomic, copy) UIImage *shadowImage;//defailt is nil, means use system default shadow image
+@property (nonatomic) BOOL shadowImageHidden;//default is NO
 
 @end

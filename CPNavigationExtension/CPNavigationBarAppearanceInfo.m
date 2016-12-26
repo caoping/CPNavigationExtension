@@ -20,12 +20,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#import <UIKit/UIKit.h>
-#import "UINavigationBar+CPNavigationExtension.h"
-#import "UIViewController+CPNavigationExtension.h"
+#import "CPNavigationBarAppearanceInfo.h"
 
-@interface UINavigationController (CPNavigationExtension)
-
-- (void)cp_setNavigationBarAppearanceAfterLoadViewIfNeededWithViewController:(UIViewController *)viewController;
+@implementation CPNavigationBarAppearanceInfo
 
 @end

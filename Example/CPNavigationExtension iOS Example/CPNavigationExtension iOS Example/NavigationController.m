@@ -19,7 +19,7 @@
     [super viewDidLoad];
     
     self.delegate = self;
-    self.navigationBar.cp_transitionEnabled = YES;
+    [self.navigationBar cp_setAppearanceWithBarAppearanceInfo:nil];
     [self setNavigationBarAppearanceWithFirstViewController];
 }
 

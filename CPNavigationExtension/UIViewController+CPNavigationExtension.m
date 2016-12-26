@@ -20,14 +20,19 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#import <UIKit/UIKit.h>
+#import "UIViewController+CPNavigationExtension.h"
+#import <objc/runtime.h>
 
-@interface UINavigationItem (CPNavigationExtension)
+@implementation UIViewController (CPNavigationExtension)
 
-@property (nonatomic, copy) UIColor *cp_tintColor;
-@property (nonatomic, copy) UIColor *cp_barTintColor;
-@property (nonatomic, copy) NSDictionary *cp_titleTextAttributes;
-@property (nonatomic, copy) UIImage *cp_shadowImage;
-@property (nonatomic) BOOL cp_shadowImageHidden;
+#pragma mark - Associated Object
+
+- (void)setCp_navigationBarAppearanceInfo:(CPNavigationBarAppearanceInfo *)cp_navigationBarAppearanceInfo {
+    objc_setAssociatedObject(self, @selector(cp_navigationBarAppearanceInfo), cp_navigationBarAppearanceInfo, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
+- (CPNavigationBarAppearanceInfo *)cp_navigationBarAppearanceInfo {
+    return objc_getAssociatedObject(self, _cmd);
+}
 
 @end

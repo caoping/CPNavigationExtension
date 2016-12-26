@@ -20,7 +20,9 @@
     [super viewDidLoad];
     
     [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"myCell"];
-    self.navigationItem.cp_shadowImageHidden = YES;
+    CPNavigationBarAppearanceInfo *info = [CPNavigationBarAppearanceInfo new];
+    info.shadowImageHidden = YES;
+    self.cp_navigationBarAppearanceInfo = info;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {

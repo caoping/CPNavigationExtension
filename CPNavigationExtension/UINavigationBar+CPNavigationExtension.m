@@ -27,24 +27,25 @@
 
 #pragma mark - Public Methods
 
-- (void)cp_setAppearanceWithNavigationItem:(UINavigationItem *)item {
-    if (self.cp_transitionEnabled) {
-        UIToolbar *backdropEffectView = [self cp_backdropEffectView];
-        if (__CPNavigationExtensionSystemMajorVersion() < 10) {
-            //iOS10 earlier
-            [CATransaction begin];
-            [CATransaction setDisableActions:YES];
-            backdropEffectView.barTintColor = item.cp_barTintColor?:self.cp_defaultBarTintColor;
-            [CATransaction commit];
-        } else {
-            backdropEffectView.barTintColor = item.cp_barTintColor?:self.cp_defaultBarTintColor;
-        }
-        
-        [self setTintColor:item.cp_tintColor?:self.cp_defaultTintColor];
-        [self setTitleTextAttributes:item.cp_titleTextAttributes?:self.cp_defaultTitleTextAttributes];
-        [self setShadowImage:item.cp_shadowImage?:self.cp_defaultShadowImage];
-        [self cp_setShadowImageHidden:item.cp_shadowImageHidden];
+- (void)cp_setAppearanceWithBarAppearanceInfo:(CPNavigationBarAppearanceInfo *)info {
+    [self cp_addBackdropEffectViewIfNeeded];
+    CPNavigationBarAppearanceInfo *defaultInfo = self.cp_defaultBarAppearanceInfo;
+    
+    UIToolbar *backdropEffectView = [self cp_backdropEffectView];
+    if (__CPNavigationExtensionSystemMajorVersion() < 10) {
+        //iOS10 earlier
+        [CATransaction begin];
+        [CATransaction setDisableActions:YES];
+        backdropEffectView.barTintColor = info.barTintColor?:defaultInfo.barTintColor;
+        [CATransaction commit];
+    } else {
+        backdropEffectView.barTintColor = info.barTintColor?:defaultInfo.barTintColor;
     }
+    
+    [self setTintColor:info.tintColor?:defaultInfo.tintColor];
+    [self setTitleTextAttributes:info.titleTextAttributes?:defaultInfo.titleTextAttributes];
+    [self setShadowImage:info.shadowImage?:defaultInfo.shadowImage];
+    [self cp_setShadowImageHidden:info.shadowImageHidden];
 }
 
 - (void)cp_setShadowImageHidden:(BOOL)shadowImageHidden {
@@ -60,45 +61,11 @@
 
 #pragma mark - Associated Object
 
-- (void)setCp_transitionEnabled:(BOOL)cp_transitionEnabled {
-    objc_setAssociatedObject(self, @selector(cp_transitionEnabled), @(cp_transitionEnabled), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-    [self cp_addBackdropEffectViewIfNeeded];
+- (void)setCp_defaultBarAppearanceInfo:(CPNavigationBarAppearanceInfo *)cp_defaultBarAppearanceInfo {
+    objc_setAssociatedObject(self, @selector(cp_defaultBarAppearanceInfo), cp_defaultBarAppearanceInfo, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
-- (BOOL)cp_transitionEnabled {
-    return objc_getAssociatedObject(self, _cmd);
-}
-
-- (void)setCp_defaultTintColor:(UIColor *)cp_defaultTintColor {
-    objc_setAssociatedObject(self, @selector(cp_defaultTintColor), cp_defaultTintColor, OBJC_ASSOCIATION_COPY_NONATOMIC);
-}
-
-- (UIColor *)cp_defaultTintColor {
-    return objc_getAssociatedObject(self, _cmd);
-}
-
-- (void)setCp_defaultBarTintColor:(UIColor *)cp_defaultBarTintColor {
-    objc_setAssociatedObject(self, @selector(cp_defaultBarTintColor), cp_defaultBarTintColor, OBJC_ASSOCIATION_COPY_NONATOMIC);
-    [[self cp_backdropEffectView] setBarTintColor:cp_defaultBarTintColor];
-}
-
-- (UIColor *)cp_defaultBarTintColor {
-    return objc_getAssociatedObject(self, _cmd);
-}
-
-- (void)setCp_defaultTitleTextAttributes:(NSDictionary *)cp_defaultTitleTextAttributes {
-    objc_setAssociatedObject(self, @selector(cp_defaultTitleTextAttributes), cp_defaultTitleTextAttributes, OBJC_ASSOCIATION_COPY_NONATOMIC);
-}
-
-- (NSDictionary *)cp_defaultTitleTextAttributes {
-    return objc_getAssociatedObject(self, _cmd);
-}
-
-- (void)setCp_defaultShadowImage:(UIImage *)cp_defaultShadowImage {
-    objc_setAssociatedObject(self, @selector(cp_defaultShadowImage), cp_defaultShadowImage, OBJC_ASSOCIATION_COPY_NONATOMIC);
-}
-
-- (UIImage *)cp_defaultShadowImage {
+- (CPNavigationBarAppearanceInfo *)cp_defaultBarAppearanceInfo {
     return objc_getAssociatedObject(self, _cmd);
 }
 

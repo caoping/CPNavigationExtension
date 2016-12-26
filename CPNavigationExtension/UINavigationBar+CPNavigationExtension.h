@@ -21,17 +21,13 @@
 // SOFTWARE.
 
 #import <UIKit/UIKit.h>
-#import "UINavigationItem+CPNavigationExtension.h"
+#import "CPNavigationBarAppearanceInfo.h"
 
 @interface UINavigationBar (CPNavigationExtension)
 
-@property (nonatomic) BOOL cp_transitionEnabled;
-@property (nonatomic, copy) UIColor *cp_defaultTintColor;
-@property (nonatomic, copy) UIColor *cp_defaultBarTintColor;
-@property (nonatomic, copy) NSDictionary *cp_defaultTitleTextAttributes;
-@property (nonatomic, copy) UIImage *cp_defaultShadowImage;
+@property (nonatomic) CPNavigationBarAppearanceInfo *cp_defaultBarAppearanceInfo;
 
-- (void)cp_setAppearanceWithNavigationItem:(UINavigationItem *)item;
+- (void)cp_setAppearanceWithBarAppearanceInfo:(CPNavigationBarAppearanceInfo *)info;
 - (void)cp_setShadowImageHidden:(BOOL)shadowImageHidden;
 
 @end

@@ -54,7 +54,7 @@
         return;
     }
     [viewController cp_loadViewIfNeeded];
-    [self.navigationBar cp_setAppearanceWithNavigationItem:viewController.navigationItem];
+    [self.navigationBar cp_setAppearanceWithBarAppearanceInfo:viewController.cp_navigationBarAppearanceInfo];
 }
 
 @end
